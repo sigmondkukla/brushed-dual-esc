@@ -1,0 +1,7 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "AP2210")(type "KiCad")(uri "${KIPRJMOD}/kicad-library-sigmondkukla/symbols/AP2210.kicad_sym")(options "")(descr ""))
+  (lib (name "DRV8212DRLR")(type "KiCad")(uri "${KIPRJMOD}/kicad-library-sigmondkukla/symbols/DRV8212DRLR.kicad_sym")(options "")(descr ""))
+  (lib (name "Driver_Motor_TI")(type "KiCad")(uri "${KIPRJMOD}/kicad-library-sigmondkukla/symbols/Driver_Motor_TI.kicad_sym")(options "")(descr ""))
+  (lib (name "Regulator_Linear_TI")(type "KiCad")(uri "${KIPRJMOD}/kicad-library-sigmondkukla/symbols/Regulator_Linear_TI.kicad_sym")(options "")(descr ""))
+)
