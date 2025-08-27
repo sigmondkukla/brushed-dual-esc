@@ -1,4 +1,4 @@
-24737348044993382
+24754845126861185
 Audio_Module
 Reverb_BTDR-1H
 Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)
@@ -3419,6 +3419,76 @@ Capacitor_SMD
 C_Trimmer_Voltronics_JZ
 trimmer capacitor SMD horizontal, http://www.knowlescapacitors.com/File%20Library/Voltronics/English/GlobalNavigation/Products/Trimmer%20Capacitors/CerChipTrimCap.pdf
  Voltronics JR
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D4L5.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x4x5.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP-ASLI_SIZE_4
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D5L5.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x5x5.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_5
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D6.3L5.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x6.3x5.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_6_3
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D6.3L6.1
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x6.3x6.1mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_6_3
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D6.3L7.7
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x6.3x7.7mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_6_3
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D8L6.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x8x6.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_8
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D8L10.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x8x10.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_8
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D10L10.5
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x10x10.5mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_10
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D12.5L14
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x12.5x14mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ASLI_SIZE_12_5
+SMT
+0
+2
+2
+Capacitor_SMD_Wurth
+CP_Wurth_WCAP-ASLI-D16L17
+Aluminum Electrolytic Capacitors Low Impedance +105 °C, body x16x17mm, https://www.we-online.com/en/components/products/WCAP-ASLI#/articles/WCAP_ALSI_SIZE_16
+SMT
 0
 2
 2
