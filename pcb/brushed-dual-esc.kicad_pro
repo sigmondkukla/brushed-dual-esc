@@ -58,7 +58,28 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [],
+      "drc_exclusions": [
+        [
+          "courtyards_overlap|122700000|83978101|0ac96452-67d3-4a3d-b100-09eb29b35bec|8726e1ec-ab6f-4dc7-953f-0d95198cfaa7",
+          ""
+        ],
+        [
+          "courtyards_overlap|135755000|79768329|1f9739d6-821c-45de-87ca-cfb6fc36916f|3d1b6c25-d2ca-4101-8cb2-cc7c76f54b6b",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|121550000|84450000|0ac96452-67d3-4a3d-b100-09eb29b35bec|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|135500000|82544887|3d1b6c25-d2ca-4101-8cb2-cc7c76f54b6b|00000000-0000-0000-0000-000000000000",
+          ""
+        ],
+        [
+          "lib_footprint_mismatch|143675000|82500000|1f9739d6-821c-45de-87ca-cfb6fc36916f|00000000-0000-0000-0000-000000000000",
+          ""
+        ]
+      ],
       "meta": {
         "version": 2
       },
@@ -138,7 +159,7 @@
         "min_track_width": 0.1,
         "min_via_annular_width": 0.1,
         "min_via_diameter": 0.35,
-        "solder_mask_to_copper_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.005,
         "use_height_for_length_calcs": true
       },
       "teardrop_options": [
@@ -505,7 +526,7 @@
       "plot": "",
       "pos_files": "",
       "specctra_dsn": "",
-      "step": "",
+      "step": "brushed-dual-esc.step",
       "svg": "",
       "vrml": ""
     },
