@@ -609,10 +609,17 @@ void set_motor_speed(uint32_t pulse, uint32_t tim_channel_in1, uint32_t tim_chan
 
     // --- Neutral / Coast ---
     // (DRV8231A Table 8-2: IN1=0, IN2=0 -> Coast)
+//    if (pulse > NEUTRAL_LOW && pulse < NEUTRAL_HIGH)
+//    {
+//        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in1, 0);
+//        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in2, 0);
+//    }
+//     --- Neutral / Brake ---
+//     (DRV8231A Table 8-2: IN1=0, IN2=0 -> Coast)
     if (pulse > NEUTRAL_LOW && pulse < NEUTRAL_HIGH)
     {
-        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in1, 0);
-        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in2, 0);
+        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in1, MAX_DUTY);
+        __HAL_TIM_SET_COMPARE(&htim1, tim_channel_in2, MAX_DUTY);
     }
     // --- Forward ---
     // (DRV8231A Table 8-2: IN1=PWM, IN2=0 -> Forward)
