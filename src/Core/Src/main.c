@@ -31,7 +31,23 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define PULSE_TIMEOUT_MS 200 // 10 missed pulses
+// --- Failsafe timer configuration ---
+#define PULSE_TIMEOUT_MS 100 // 100 ms at 50 Hz is 5 missed pulses I think
+
+// --- MIN BATTERY VOLTAGE CUTOFF CONFIGURATION ---
+/* Calculate this yourself:
+ * 1. Multiply min cell voltage by number of cells to get min battery voltage
+ * 		v_batt_min = v_cell_min * batt_s
+ * 2. Calculate voltage divider gain based on R1 and R2 in https://www.digikey.com/en/resources/conversion-calculators/conversion-calculator-voltage-divider
+ * 		divider_gain = r2 / (r1 + r2)
+ * 3. Calculate min divided voltage (input to ADC pin)
+ * 		v_divided_min = v_batt_min * divider_gain
+ * 4. Calculate min ADC counts (here we assume 12 bit ADC, so (2^12)-1=4095 max counts at VREF, which we assume is 3.3V)
+ * 		MIN_BATT_ADC = (v_divided_min / 3.3) * 4095
+ * 5. Round it to the nearest whole number and enter below
+ */
+
+#define MIN_BATT_ADC 2286 // 2286 for safe 10.5V min (3.5V/cell) or use 1959 for 9V (3V/cell) absolute min
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -62,7 +78,12 @@ volatile uint32_t Pulse_Width_CH2 = 1500; // Default to neutral
 volatile uint8_t Is_First_Captured_CH2 = 0; // 0 = waiting for rising, 1 = waiting for falling
 volatile uint32_t last_pulse_time_ch2 = 0; // For failsafe
 
-//uint32_t current_pwm = 0;
+volatile uint32_t now;
+uint32_t pulse1, pulse2;
+uint32_t last_seen1, last_seen2;
+uint8_t error;
+uint8_t batt_cutoff;
+volatile uint32_t batt_adc_reading = 69;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -113,7 +134,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-  // Turn on LED to indicate power
+  // Turn on LED to indicate boot
   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
 
   // --- Start Motor 1 (DRV1) PWM Channels ---
@@ -138,12 +159,19 @@ int main(void)
   HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_1); // RX_CH2 (PB6) -> Motor 2
   HAL_TIM_IC_Start_IT(&htim3, TIM_CHANNEL_2); // RX_CH1 (PB7) -> Motor 1
 
+  // Start ADC continuous mode
+  HAL_ADCEx_Calibration_Start(&hadc1);
+  HAL_ADC_Start(&hadc1);
+
   // Initialize failsafe timestamps
-  uint32_t now = HAL_GetTick();
+  now = HAL_GetTick();
   last_pulse_time_ch1 = now;
   last_pulse_time_ch2 = now;
+  error = 0;
+  batt_cutoff = 0;
 
-
+  // Turn off LED to indicate success
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
 
   /* USER CODE END 2 */
 
@@ -154,125 +182,55 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // Process new pulse for Motor 1 (from RX_CH1 -> TIM3_CH2)
-//    if (Ch1_New_Pulse)
-//    {
-//        // Atomically read the pulse width and clear the flag
-//        HAL_NVIC_DisableIRQ(TIM3_IRQn);
-//        uint32_t pulse1 = Pulse_Width_CH1;
-//        Ch1_New_Pulse = 0; // Clear the flag
-//        HAL_NVIC_EnableIRQ(TIM3_IRQn);
-//
-//        // DRV1_IN1 (PA1) -> TIM1_CH2
-//        // DRV1_IN2 (PA2) -> TIM1_CH3
-//        set_motor_speed(pulse1, TIM_CHANNEL_2, TIM_CHANNEL_3);
-//    }
-//
-//    // Process new pulse for Motor 2 (from RX_CH2 -> TIM3_CH1)
-//    if (Ch2_New_Pulse)
-//    {
-//        // Atomically read the pulse width and clear the flag
-//        HAL_NVIC_DisableIRQ(TIM3_IRQn);
-//        uint32_t pulse2 = Pulse_Width_CH2;
-//        Ch2_New_Pulse = 0; // Clear the flag
-//        HAL_NVIC_EnableIRQ(TIM3_IRQn);
-//
-//        // DRV2_IN1 (PA11) -> TIM1_CH4
-//        // DRV2_IN2 (PA8)  -> TIM1_CH1
-//        set_motor_speed(pulse2, TIM_CHANNEL_4, TIM_CHANNEL_1);
-//    }
+  	now = HAL_GetTick();
+  	error = 0;
 
-    // Simple test for Motor 1
-    // Motor 1 uses TIM_CHANNEL_2 (IN1) and TIM_CHANNEL_3 (IN2)
-    // MAX_DUTY is 599, so 50% duty is ~299
+   	batt_adc_reading = HAL_ADC_GetValue(&hadc1);
+//  	if (batt_adc_reading < MIN_BATT_ADC) {
+//  		batt_cutoff = 1;
+//  		error = 1;
+//  	} else {
+//  		batt_cutoff = 0;
+//  	}
 
-    // Motor 1 Forward at 50% duty
-    // (DRV8231A Table 8-2: IN1=PWM, IN2=0 -> Forward)
-//    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0); // IN1 = 50% PWM
-//    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 599);   // IN2 = 0
-//
-//    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 599); // IN1 = 50% PWM
-//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);   // IN2 = 0
+  	// Atomically get the latest pulse data from the ISR
+  	HAL_NVIC_DisableIRQ(TIM3_IRQn);
+  	pulse1 = Pulse_Width_CH1;
+  	last_seen1 = last_pulse_time_ch1;
+  	pulse2 = Pulse_Width_CH2;
+  	last_seen2 = last_pulse_time_ch2;
+  	HAL_NVIC_EnableIRQ(TIM3_IRQn);
 
-//    current_pwm++;
-//    if (current_pwm > 599) current_pwm = 0;
-//
-//    HAL_Delay(10);
+  	if (!batt_cutoff) {
+			if (now - last_seen1 > PULSE_TIMEOUT_MS) // motor 1 failsafe
+			{
+				// coast IN1=IN2=0
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0);
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0);
 
-//    // Motor 1 Coast
-//    // (DRV8231A Table 8-2: IN1=0, IN2=0 -> Coast)
-//    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0); // IN1 = 0
-//    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0); // IN2 = 0
-//
-//    HAL_Delay(1000); // Wait 1 second
-  		uint32_t now = HAL_GetTick();
-  	    uint32_t pulse1, pulse2;
-  	    uint32_t last_seen1, last_seen2;
-  	    static uint32_t last_led_toggle_time = 0;
+				error = 1;
+			}
+			else // motor 1 good
+			{
+				set_motor_speed(pulse1, TIM_CHANNEL_2, TIM_CHANNEL_3);
+			}
 
-  	    // Atomically get the latest pulse data from the ISR
-  	    HAL_NVIC_DisableIRQ(TIM3_IRQn);
-  	    pulse1 = Pulse_Width_CH1;
-  	    last_seen1 = last_pulse_time_ch1;
-  	    pulse2 = Pulse_Width_CH2;
-  	    last_seen2 = last_pulse_time_ch2;
-  	    HAL_NVIC_EnableIRQ(TIM3_IRQn);
+			if (now - last_seen2 > PULSE_TIMEOUT_MS) // motor 2 failsafe
+			{
+				// coast IN1=IN2=0
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0);
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 
+				error = 1;
+			}
+			else // motor 2 good
+			{
+				set_motor_speed(pulse2, TIM_CHANNEL_4, TIM_CHANNEL_1);
+			}
+  	}
 
-  	    // --- Motor 1 Failsafe Logic ---
-  	    if (now - last_seen1 > PULSE_TIMEOUT_MS)
-  	    {
-  	        // FAILSAFE: Signal lost, coast the motor
-  	        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 0); // IN1 = 0
-  	        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 0); // IN2 = 0
-
-  	        HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 1);
-						last_led_toggle_time = now; // Reset toggle time
-  	    }
-  	    else
-  	    {
-  	        // Signal is good, set motor speed
-  	        // DRV1_IN1 (PA1) -> TIM1_CH2
-  	        // DRV1_IN2 (PA2) -> TIM1_CH3
-  	        set_motor_speed(pulse1, TIM_CHANNEL_2, TIM_CHANNEL_3);
-
-  	        // --- LED Flash Logic ---
-					 // Calculate toggle period (half-period) based on pulse1
-					 // Map [1000us...2000us] to [1Hz...10Hz]
-					 // 1Hz -> 1000ms period -> 500ms toggle
-					 // 10Hz -> 100ms period -> 50ms toggle
-
-					 uint32_t clamped_pulse1 = pulse1;
-					 if (clamped_pulse1 < 1000) clamped_pulse1 = 1000;
-					 if (clamped_pulse1 > 2000) clamped_pulse1 = 2000;
-
-					 // Map pulse [1000...2000] to toggle period [500...50]
-					 // (pulse - 1000) * (50 - 500) / (2000 - 1000) + 500
-					 // (pulse - 1000) * (-450) / 1000 + 500
-					 // 500 - ((pulse - 1000) * 450 / 1000)
-					 uint32_t toggle_period_ms = 500 - (((clamped_pulse1 - 1000) * 450) / 1000);
-
-					 if (now - last_led_toggle_time > toggle_period_ms)
-					 {
-							 HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-							 last_led_toggle_time = now;
-					 }
-  	    }
-
-  	    // --- Motor 2 Failsafe Logic ---
-  	    if (now - last_seen2 > PULSE_TIMEOUT_MS)
-  	    {
-  	        // FAILSAFE: Signal lost, coast the motor
-  	        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 0); // IN1 = 0
-  	        __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0); // IN2 = 0
-  	    }
-  	    else
-  	    {
-  	        // Signal is good, set motor speed
-  	        // DRV2_IN1 (PA11) -> TIM1_CH4
-  	        // DRV2_IN2 (PA8)  -> TIM1_CH1
-  	        set_motor_speed(pulse2, TIM_CHANNEL_4, TIM_CHANNEL_1);
-  	    }
+  	// write error state to LED each time
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, !error);
   }
   /* USER CODE END 3 */
 }
@@ -349,7 +307,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = DISABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_1CYCLE_5;
+  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_160CYCLES_5;
   hadc1.Init.OversamplingMode = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -359,32 +317,8 @@ static void MX_ADC1_Init(void)
 
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_0;
-  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_7;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /** Configure Regular Channel
-  */
   sConfig.Channel = ADC_CHANNEL_12;
+  sConfig.Rank = ADC_RANK_CHANNEL_NUMBER;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -536,7 +470,7 @@ static void MX_TIM3_Init(void)
   sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
   sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
   sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-  sConfigIC.ICFilter = 0;
+  sConfigIC.ICFilter = 15;
   if (HAL_TIM_IC_ConfigChannel(&htim3, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
@@ -604,8 +538,11 @@ void set_motor_speed(uint32_t pulse, uint32_t tim_channel_in1, uint32_t tim_chan
     // If pulse is way out of range, default to neutral
     if (pulse < 500 || pulse > 2500)
     {
-        pulse = 1500;
+//        pulse = 1500;
+    	error = 1;
+//        HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, 0);
     }
+
 
     // --- Neutral / Coast ---
     // (DRV8231A Table 8-2: IN1=0, IN2=0 -> Coast)
@@ -671,17 +608,26 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             else  // Second edge (Falling)
             {
                 IC_Val2_CH1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
+                // --- FIX: Use a unique variable name ---
+                uint32_t new_pulse_width_ch1 = 0;
 
                 if (IC_Val2_CH1 > IC_Val1_CH1)
                 {
-                    Pulse_Width_CH1 = IC_Val2_CH1 - IC_Val1_CH1;
+                    new_pulse_width_ch1 = IC_Val2_CH1 - IC_Val1_CH1;
                 }
                 else if (IC_Val1_CH1 > IC_Val2_CH1) // Timer overflow
                 {
-                    Pulse_Width_CH1 = (0xFFFF - IC_Val1_CH1) + IC_Val2_CH1 + 1;
+                    new_pulse_width_ch1 = (0xFFFF - IC_Val1_CH1) + IC_Val2_CH1 + 1;
                 }
 
-                last_pulse_time_ch1 = HAL_GetTick(); // Update failsafe timestamp
+                // --- Validate and save for CH1 ---
+                // Discard any junk pulses outside the valid 800-2200us range
+                if (new_pulse_width_ch1 > 800 && new_pulse_width_ch1 < 2200)
+                {
+                    Pulse_Width_CH1 = new_pulse_width_ch1; // Write to CH1's variable
+                    last_pulse_time_ch1 = HAL_GetTick();   // Write to CH1's timestamp
+                }
+
                 Is_First_Captured_CH1 = 0;
                 // Change polarity back to rising edge
                 __HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_2, TIM_INPUTCHANNELPOLARITY_RISING);
@@ -701,17 +647,26 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             else  // Second edge (Falling)
             {
                 IC_Val2_CH2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+                // --- FIX: Use a unique variable name ---
+                uint32_t new_pulse_width_ch2 = 0;
 
                 if (IC_Val2_CH2 > IC_Val1_CH2)
                 {
-                    Pulse_Width_CH2 = IC_Val2_CH2 - IC_Val1_CH2;
+                    new_pulse_width_ch2 = IC_Val2_CH2 - IC_Val1_CH2;
                 }
                 else if (IC_Val1_CH2 > IC_Val2_CH2) // Timer overflow
                 {
-                    Pulse_Width_CH2 = (0xFFFF - IC_Val1_CH2) + IC_Val2_CH2 + 1;
+                    new_pulse_width_ch2 = (0xFFFF - IC_Val1_CH2) + IC_Val2_CH2 + 1;
                 }
 
-                last_pulse_time_ch2 = HAL_GetTick(); // Update failsafe timestamp
+                // --- Validate and save for CH2 ---
+                // Discard any junk pulses outside the valid 800-2200us range
+                if (new_pulse_width_ch2 > 800 && new_pulse_width_ch2 < 2200)
+                {
+                    Pulse_Width_CH2 = new_pulse_width_ch2; // Write to CH2's variable
+                    last_pulse_time_ch2 = HAL_GetTick();   // Write to CH2's timestamp
+                }
+
                 Is_First_Captured_CH2 = 0;
                 // Change polarity back to rising edge
                 __HAL_TIM_SET_CAPTUREPOLARITY(htim, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
@@ -719,6 +674,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         }
     }
 }
+
 /* USER CODE END 4 */
 
 /**

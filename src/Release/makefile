@@ -61,7 +61,7 @@ main-build: brushed-dual-esc.elf secondary-outputs
 
 # Tool invocations
 brushed-dual-esc.elf brushed-dual-esc.map: $(OBJS) $(USER_OBJS) C:\Users\Sigmond\Programming\brushed-dual-esc\src\STM32C011F4UX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "brushed-dual-esc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Sigmond\Programming\brushed-dual-esc\src\STM32C011F4UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="brushed-dual-esc.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+	arm-none-eabi-gcc -o "brushed-dual-esc.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\Sigmond\Programming\brushed-dual-esc\src\STM32C011F4UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="brushed-dual-esc.map" -Wl,--gc-sections -static -u _printf_nano --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
