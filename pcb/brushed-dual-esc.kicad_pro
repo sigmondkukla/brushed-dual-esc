@@ -76,32 +76,7 @@
           "width": 0.0
         }
       ],
-      "drc_exclusions": [
-        [
-          "courtyards_overlap|122700000|83978101|0ac96452-67d3-4a3d-b100-09eb29b35bec|8726e1ec-ab6f-4dc7-953f-0d95198cfaa7",
-          ""
-        ],
-        [
-          "footprint_symbol_mismatch|133775000|84700000|d3d9f176-e78d-41ca-8db5-d13ce70c50f8|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "lib_footprint_mismatch|121550000|84450000|0ac96452-67d3-4a3d-b100-09eb29b35bec|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "lib_footprint_mismatch|134700000|91900000|3d1b6c25-d2ca-4101-8cb2-cc7c76f54b6b|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "lib_footprint_mismatch|143675000|82500000|1f9739d6-821c-45de-87ca-cfb6fc36916f|00000000-0000-0000-0000-000000000000",
-          ""
-        ],
-        [
-          "text_thickness|142300000|77700000|90adefb7-672e-46ff-9e59-0d2a4003b08d|00000000-0000-0000-0000-000000000000",
-          ""
-        ]
-      ],
+      "drc_exclusions": [],
       "meta": {
         "version": 2
       },
@@ -721,7 +696,7 @@
         "uuid": "624d6987-cb00-44c1-bd75-457d49fec660"
       }
     ],
-    "used_designators": "U4,U6-7,R6,J3-9,D2,#PWR31,#PWR33,#PWR35,#PWR40,H1-2",
+    "used_designators": "",
     "variants": []
   },
   "sheets": [
