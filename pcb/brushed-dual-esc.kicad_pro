@@ -544,7 +544,7 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "",
+      "plot": "fabrication/gerbers/",
       "pos_files": "",
       "specctra_dsn": "",
       "step": "brushed-dual-esc.step",
