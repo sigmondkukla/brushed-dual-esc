@@ -61,9 +61,9 @@
           "hatch_smoothing_value": 0.1,
           "hatch_thickness": 1.0,
           "min_clearance": 0.2,
-          "min_island_area": 10.0,
+          "min_island_area": 0.0013161349,
           "min_thickness": 0.25,
-          "pad_connection": 1,
+          "pad_connection": 2,
           "remove_islands": 0,
           "thermal_relief_gap": 0.5,
           "thermal_relief_spoke_width": 0.5
@@ -214,7 +214,8 @@
         0.25,
         0.3,
         0.5,
-        1.0
+        1.0,
+        2.0
       ],
       "tuning_pattern_settings": {
         "diff_pair_defaults": {
@@ -696,7 +697,7 @@
         "uuid": "624d6987-cb00-44c1-bd75-457d49fec660"
       }
     ],
-    "used_designators": "C2-11,U1",
+    "used_designators": "C2-11,U1,U4,J10-13",
     "variants": []
   },
   "sheets": [
