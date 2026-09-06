@@ -614,13 +614,13 @@
           "group_by": true,
           "label": "Footprint",
           "name": "Footprint",
-          "show": true
+          "show": false
         },
         {
           "group_by": false,
           "label": "Datasheet",
           "name": "Datasheet",
-          "show": true
+          "show": false
         },
         {
           "group_by": false,
@@ -639,6 +639,12 @@
           "label": "#",
           "name": "${ITEM_NUMBER}",
           "show": false
+        },
+        {
+          "group_by": true,
+          "label": "MPN",
+          "name": "MPN",
+          "show": true
         }
       ],
       "filter_string": "",
@@ -697,7 +703,7 @@
         "uuid": "624d6987-cb00-44c1-bd75-457d49fec660"
       }
     ],
-    "used_designators": "C2-11,U1,U4,J10-13",
+    "used_designators": "C2-11,U1,U4,R6,J10-13,#PWR5,#PWR31",
     "variants": []
   },
   "sheets": [
