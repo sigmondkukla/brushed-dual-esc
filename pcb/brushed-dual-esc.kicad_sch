@@ -3108,6 +3108,16 @@
 		)
 		(uuid "5bc7eb37-f25f-4d6a-9a08-9bf6631c4f7a")
 	)
+	(text "V_{f}=1.9V"
+		(exclude_from_sim no)
+		(at 17.78 171.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "741a9920-e5ea-45d9-883f-7d0d66ba0028")
+	)
 	(text "Battery connection"
 		(exclude_from_sim no)
 		(at 13.97 13.97 0)
@@ -4911,7 +4921,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22uF 10V"
+		(property "Value" "22u 10V"
 			(at 86.36 82.5562 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5092,7 +5102,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "10µF 25V"
+		(property "Value" "10u 25V"
 			(at 27.94 82.5562 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -8656,7 +8666,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "Vf=1.9V"
+		(property "Value" "LC19DJECT-2MA-U1"
 			(at 27.94 172.6564 90)
 			(show_name no)
 			(do_not_autoplace no)

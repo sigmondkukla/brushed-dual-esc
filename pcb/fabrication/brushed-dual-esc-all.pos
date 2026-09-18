@@ -1,0 +1,27 @@
+### Footprint positions - created on 2026-09-17T12:11:49 ###
+### Printed by KiCad version 10.0.3
+## Unit = mm, Angle = deg.
+## Side : All
+# Ref     Val               Package                                  PosX       PosY       Rot  Side
+C1        10u_25V           C_0805_2012Metric                     24.0000    22.2000  -90.0000  top
+C2        4.7u_10V          C_0603_1608Metric                     24.0000     2.0000   90.0000  top
+C3        22u_10V           C_0603_1608Metric                     16.0000    20.0000  -90.0000  top
+C4        4.7u_10V          C_0603_1608Metric                     14.0000     4.5000    0.0000  top
+C5        4.7u_10V          C_0603_1608Metric                     17.0000     2.0000   90.0000  top
+C6        100n_50V          C_0603_1608Metric                     14.0000     6.5000    0.0000  top
+C8        100n_50V          C_0603_1608Metric                      4.9000    19.0000  180.0000  top
+C9        100n_50V          C_0603_1608Metric                     29.0000     7.0000  -90.0000  top
+C10       100uF_25V         CP_Elec_6.3x5.7                       10.0000    21.5000    0.0000  top
+C11       100uF_25V         CP_Elec_6.3x5.7                       23.0000     8.0000  180.0000  top
+D2        LC19DJECT-2MA-U1  LED_0603_1608Metric                   11.0000     2.0000  -90.0000  top
+R2        33k               R_0603_1608Metric                     17.8000     6.0000  180.0000  top
+R3        10k               R_0603_1608Metric                     17.8000     4.4000    0.0000  top
+R4        750               R_0603_1608Metric                      9.0000    10.7000  180.0000  top
+R5        750               R_0603_1608Metric                     19.0000    18.0000    0.0000  top
+R6        750               R_0603_1608Metric                     13.5000     1.2000  180.0000  top
+U1        AZ1117CR-5.0TRG1  SOT-89-3                              19.5000    21.5000  180.0000  top
+U2        TLV77133PDBVR     SOT-23-5                              20.5000     2.0000  180.0000  top
+U3        STM32C011F6U6     ST_UFQFPN-20_3x3mm_P0.5mm             14.0000     9.5000   90.0000  top
+U6        DRV8231ADDAR      Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm     9.0000    14.5000  180.0000  top
+U7        DRV8231ADDAR      Texas_HSOP-8-1EP_3.9x4.9mm_P1.27mm    21.0000    14.5000    0.0000  top
+## End
