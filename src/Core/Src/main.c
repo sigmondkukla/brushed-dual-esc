@@ -47,7 +47,7 @@
  * 5. Round it to the nearest whole number and enter below
  */
 
-#define MIN_BATT_ADC 2286 // 2286 for safe 10.5V min (3.5V/cell) or use 1959 for 9V (3V/cell) absolute min
+#define MIN_BATT_ADC 2597 // 3V/cell
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/

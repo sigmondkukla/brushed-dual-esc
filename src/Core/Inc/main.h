@@ -61,14 +61,20 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED_Pin GPIO_PIN_15
 #define LED_GPIO_Port GPIOC
-#define DRV1_IN1_Pin GPIO_PIN_1
-#define DRV1_IN1_GPIO_Port GPIOA
-#define DRV1_IN2_Pin GPIO_PIN_2
-#define DRV1_IN2_GPIO_Port GPIOA
-#define DRV2_IN2_Pin GPIO_PIN_8
-#define DRV2_IN2_GPIO_Port GPIOA
-#define DRV2_IN1_Pin GPIO_PIN_11
+#define BATT_SENSE_Pin GPIO_PIN_0
+#define BATT_SENSE_GPIO_Port GPIOA
+#define DRV2_IN1_Pin GPIO_PIN_1
 #define DRV2_IN1_GPIO_Port GPIOA
+#define DRV2_IN2_Pin GPIO_PIN_2
+#define DRV2_IN2_GPIO_Port GPIOA
+#define DRV2_ISENSE_Pin GPIO_PIN_7
+#define DRV2_ISENSE_GPIO_Port GPIOA
+#define DRV1_IN1_Pin GPIO_PIN_8
+#define DRV1_IN1_GPIO_Port GPIOA
+#define DRV1_IN2_Pin GPIO_PIN_11
+#define DRV1_IN2_GPIO_Port GPIOA
+#define DRV1_ISENSE_Pin GPIO_PIN_12
+#define DRV1_ISENSE_GPIO_Port GPIOA
 #define RX_CH2_Pin GPIO_PIN_6
 #define RX_CH2_GPIO_Port GPIOB
 #define RX_CH1_Pin GPIO_PIN_7
