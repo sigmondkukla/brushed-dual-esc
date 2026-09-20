@@ -1,0 +1,103 @@
+separated
+FILE,brushed-dual-esc-run.dpv
+PCBFILE,brushed-dual-esc-all-pos.csv
+DATE,2026/09/19
+TIME,07:41:46
+PANELYPE,0
+
+Table,No.,ID,DeltX,DeltY,FeedRates,Note,Height,Speed,Status,SizeX,SizeY,HeightTake,DelayTake,nPullStripSpeed
+
+Station,0,10,0.44,0.1,4,10u 25V,0.5,0,6,0,0,0,0,0
+
+Station,1,11,0.14,0,4,4.7u 10V,0.5,0,6,0,0,0,0,0
+
+Station,2,12,0.33,-0.08,4,22u 10V,0.5,0,6,0,0,0,0,0
+
+Station,3,13,0.17,-0.08,4,100n 50V,0.5,0,6,0,0,0,0,0
+
+Station,4,17,0.23,-0.11,4,LC19DJECT-2MA-U1,0.5,0,6,0,0,0,0,0
+
+Station,5,14,0.27,0.02,4,33k,0.5,0,6,0,0,0,0,0
+
+Station,6,15,0.17,-0.05,4,10k,0.5,0,6,0,0,0,0,0
+
+Station,7,16,0.11,-0.05,4,750,0.5,0,6,0,0,0,0,0
+
+Station,8,23,-0.08,0.02,8,AZ1117CR-5.0TRG1,2,0,6,0,0,0,0,0
+
+Station,9,18,0.17,0.02,4,TLV77133PDBVR,2,0,6,0,0,0,0,0
+
+Station,10,25,-0.05,0.14,8,STM32C011F6U6,1,0,6,0,0,0,0,0
+
+Station,11,24,0.13,-0.11,8,DRV8231ADDAR,2,0,7,0,0,0,0,0
+
+Station,12,1,-0.07,-0.05,4,POOP,0.5,0,6,0,0,0,0,0
+
+
+
+Table,No.,ID,DeltX,DeltY
+
+Panel_Coord,0,1,0,0
+
+
+
+Table,No.,ID,PHead,STNo.,DeltX,DeltY,Angle,Height,Skip,Speed,Explain,Note
+
+EComponent,0,1,1,10,24,22.19,0,0.5,6,0,C1,10u 25V
+
+EComponent,1,2,1,11,24,2,180,0.5,6,0,C2,4.7u 10V
+
+EComponent,2,3,1,12,16,20,0,0.5,6,0,C3,22u 10V
+
+EComponent,3,4,1,11,14,4.5,90,0.5,6,0,C4,4.7u 10V
+
+EComponent,4,5,1,11,17,2,180,0.5,6,0,C5,4.7u 10V
+
+EComponent,5,6,1,13,14,6.5,90,0.5,6,0,C6,100n 50V
+
+EComponent,6,7,1,13,4.9,19,-90,0.5,6,0,C8,100n 50V
+
+EComponent,7,8,1,13,29,7,0,0.5,6,0,C9,100n 50V
+
+EComponent,8,9,1,17,11,2,0,0.5,6,0,D2,LC19DJECT-2MA-U1
+
+EComponent,9,10,1,14,17.8,6,-90,0.5,6,0,R2,33k
+
+EComponent,10,11,1,15,17.8,4.4,90,0.5,6,0,R3,10k
+
+EComponent,11,12,1,16,9,10.66,-90,0.5,6,0,R4,750
+
+EComponent,12,13,1,16,19,18,90,0.5,6,0,R5,750
+
+EComponent,13,14,1,16,13.5,1.12,-90,0.5,6,0,R6,750
+
+EComponent,14,15,2,23,19.5,21.5,90,2,6,0,U1,AZ1117CR-5.0TRG1
+
+EComponent,15,16,1,18,20.5,2,90,2,6,0,U2,TLV77133PDBVR
+
+EComponent,16,17,2,25,14,9.5,180,1,6,0,U3,STM32C011F6U6
+
+EComponent,17,18,2,24,9,14.5,179.99,2,7,0,U6,DRV8231ADDAR
+
+EComponent,18,19,2,24,21,14.5,0,2,7,0,U7,DRV8231ADDAR
+
+
+
+Table,No.,ID,CenterX,CenterY,IntervalX,IntervalY,NumX,NumY,Start
+
+
+
+Table,No.,nType,nAlg,nFinished
+
+PcbCalib,0,0,1,1
+
+Table,No.,ID,offsetX,offsetY,Note
+
+CalibPoint,0,0,4.9,19,C8
+CalibPoint,1,0,24,2,C2
+CalibPoint,2,0,11,2,D2
+
+Table,No.,PCBX1,PCBY1,PCBX2,PCBY2,PCBX3,PCBY3,SMTX1,SMTY1,SMTX2,SMTY2,SMTX3,SMTY3,DeltaAngle
+
+CalibFator,0,490,1900,2400,200,1100,200,11740,10068,13650,8359,12350,8368,-0.39393
+

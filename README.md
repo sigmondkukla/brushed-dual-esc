@@ -25,6 +25,9 @@ The ESC pairs well therefore with the [Repeat Mini Brushed Mk2](https://repeat-r
 ## Assembly
 
 Assembly with a pick-and-place machine is reccomended for large volumes >= 10 units, though hand assembly is straightforward given the large motor driver, LDO, and passives packages.
+The pick and place work file for a CHM-T36VA machine is included in the `pcb/fabrication` directory, though minor modifications may be necessary.
+The DRV8231 ICs were not successfully picked by the machine so are set to be skipped, and the electrolytic capacitors were not attempted.
+I loaded the 503 nozzle in tool 1 and the 505 nozzle in tool 2 for this job.
 
 A clean paste image is necessary for successful soldering of the STM32 MCU.
 
